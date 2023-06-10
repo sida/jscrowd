@@ -15,13 +15,36 @@ ST.DIR = Object.freeze({
 });
 
 ST.COMMAND = Object.freeze({
-    STOP: 0,
-    START: 1,
+    INTERVAL: 1,
+    STOP: 2,
+    START: 3,
 });
 
 ST.core = (() => {
     let charList = new Set();
     let timerId = null;
+
+    let _sendMessage = (commande, param) => {
+        const message = Object.freeze([commande,param]);
+        charList.forEach((obj) => {
+            obj.message(message);
+        });
+    };
+
+    let _intervalCall = () => {
+        _sendMessage(ST.COMMAND.INTERVAL);
+    }
+
+    function _createChar(asset, x, y, dir) {
+        let parent = document.getElementById('main');
+        let char = ST.generator.player(asset)
+
+        let elem = char.getElement();
+        parent.appendChild(elem);
+        char.setLocate(x, y);
+        char.setDir(dir);
+        ST.core.addListner(char);
+    }
 
     return {
         addListner: (chrObj) => {
@@ -30,27 +53,18 @@ ST.core = (() => {
         deleteListner: (chrObj) => {
             charList.delete(chrObj);
         },
-        sendMessage: (commande, param) => {
-            const message = Object.freeze([commande,param]);
-            charList.forEach((obj) => {
-                obj.message(message);
-            });
-        },
-        callAnime() {
-            charList.forEach((obj) => {
-                obj.nextPose();
-            });
-        },
-        startAnime() {
+        sendMessage: _sendMessage,
+        startIntervalTimer() {
             if (timerId==null) {
-                timerId = setInterval(ST.core.callAnime, 300);
+                timerId = setInterval(_intervalCall, 30);
             }
         },
-        stopAnime() {
+        stopIntervalTimer() {
             if (timerId!=null) {
                 clearInterval(timerId);
             }
             timerId = null;
         },
+        createChar: _createChar,
     };
 })();

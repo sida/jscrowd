@@ -5,20 +5,19 @@ window.onload = () => {
 
     console.log("start");
 
+    // 人50人生成
     for (let i = 0; i < 50; i++) {
-        createChar(ST.assets.c1, Math.floor(Math.random() * 768), Math.floor(Math.random() * 568), Math.floor(Math.random() * 4) + 1);
+        ST.core.createChar(ST.assets.c1, Math.floor(Math.random() * 768) + 1, Math.floor(Math.random() * 568) + 1, Math.floor(Math.random() * 4) + 1);
     }
-    for (let i = 0; i < 50; i++) {
-        createChar(ST.assets.c2, Math.floor(Math.random() * 768), Math.floor(Math.random() * 568), Math.floor(Math.random() * 4) + 1);
-    }
+    // // 猫50人生成
+    // for (let i = 0; i < 50; i++) {
+    //     ST.core.createChar(ST.assets.c2, Math.floor(Math.random() * 768) + 1, Math.floor(Math.random() * 568) + 1, Math.floor(Math.random() * 4) + 1);
+    // }
 
-    ST.core.startAnime();
+    ST.core.startIntervalTimer();
 
     function createChar(asset, x, y, dir) {
         let parent = document.getElementById('main');
-
-        // let char = new Villager(ST.assets.c1);
-
         let char = ST.generator.player(asset)
 
         let elem = char.getElement();

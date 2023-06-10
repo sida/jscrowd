@@ -53,24 +53,98 @@ ST.generator.player = (asset) => {
         _elem.style.backgroundPosition = `-${px}px -${py}px`
     };
 
+    let _message = (message) => {
+        let command = message[0];
+
+        switch (command) {
+            case ST.COMMAND.INTERVAL:
+                procIntervalCommand();
+                break;
+        }
+    }
+
+    let _setLocate = (x, y) => {
+        _x = x;
+        _y = y;
+        _elem.style.top = y + "px";
+        _elem.style.left = x + "px";
+        _elem.style.zIndex = y;
+    };
+
+
+    let intervalCounter = Math.floor(Math.random() * 1000);
+
+    function procIntervalCommand() {
+        intervalCounter++;
+        if (intervalCounter >= 1000) {
+            intervalCounter = 0;
+        }
+
+        if ((intervalCounter % 200) == 0) {
+            // 時々ランダムに方向を変える
+            setDir(ST.util.randDir());
+        }
+
+        const c = intervalCounter % 10;
+        switch (c) {
+            case 0:
+                setPose(_dir, _pose + 1);
+                break;
+            case 1:
+                walk();
+                break;
+            case 10:
+                break;
+        }
+    }
+
+    function walk() {
+        let nx = _x;
+        let ny = _y;
+        const len = 4;
+        switch (_dir) {
+            case ST.DIR.UNKNOWN:
+                _dir = ST.DIR.DOWN;
+                break;
+            case ST.DIR.UP:
+                ny -= len;
+                break;
+            case ST.DIR.LEFT:
+                nx -= len;
+                break;
+            case ST.DIR.RIGHT:
+                nx += len;
+                break;
+            case ST.DIR.DOWN:
+                ny += len;
+                break;
+        }
+
+        if (!checkXY(nx, ny)) {
+            setDir(ST.util.randDir());
+            return;
+        }
+
+        _setLocate(nx, ny);
+    }
+
+    function checkXY(x, y) {
+        if ((x < 0) || (x > (ST.assets.screen_w - _asset.size.w))) {
+            return false;
+        }
+        if ((y < 0) || (y > (ST.assets.screen_h - _asset.size.h))) {
+            return false;
+        }
+        return true;
+    }
+
     return {
-        message: (message) => {
-        },
+        message: _message,
         setDir: setDir,
         setPose: setPose,
-        nextPose: () => {
-            setPose(_dir, _pose + 1);
-        },
-        show: show,
         getElement: () => {
             return _elem;
         },
-        setLocate: (x, y) => {
-            _x = x;
-            _y = y;
-            _elem.style.top = y + "px";
-            _elem.style.left = x + "px";
-            _elem.style.zIndex = y;
-        },
+        setLocate: _setLocate,
     };
 };
