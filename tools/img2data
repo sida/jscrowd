@@ -1,0 +1,6 @@
+#!/bin/bash
+
+IMGBASE64=$(cat $1 | base64)
+echo 'data:image/png;base64,'${IMGBASE64}
+
+
