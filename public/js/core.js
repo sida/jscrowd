@@ -35,9 +35,9 @@ ST.core = (() => {
         _sendMessage(ST.COMMAND.INTERVAL);
     }
 
-    function _createChar(asset, x, y, dir) {
+    function _createChar(asset, x, y, dir, action) {
         let parent = document.getElementById('main');
-        let char = ST.generator.player(asset)
+        let char = ST.generator.player(asset, action)
 
         let elem = char.getElement();
         parent.appendChild(elem);
