@@ -8,6 +8,7 @@ ST.generator.player = (asset, action) => {
     let _dir = ST.DIR.DOWN;
     let _pose = 0;
     let _my;
+    let _action = action;
 
     function createElement(asset) {
         let elem = document.createElement('div');
@@ -24,10 +25,10 @@ ST.generator.player = (asset, action) => {
     let _message = (message) => {
         let command = message[0];
 
-        switch (command) {
-            case ST.COMMAND.INTERVAL:
-                action.procInterval(_my);
-                break;
+        if (command == ST.COMMAND.INTERVAL) {
+            _action.procInterval(_my);
+        } else {
+            _action.message(_my, message);
         }
     }
 

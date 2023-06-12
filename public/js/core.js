@@ -18,6 +18,7 @@ ST.COMMAND = Object.freeze({
     INTERVAL: 1,
     STOP: 2,
     START: 3,
+    ASSEMBLE: 4,
 });
 
 ST.core = (() => {
@@ -56,7 +57,7 @@ ST.core = (() => {
         sendMessage: _sendMessage,
         startIntervalTimer() {
             if (timerId==null) {
-                timerId = setInterval(_intervalCall, 30);
+                timerId = setInterval(_intervalCall, 10);
             }
         },
         stopIntervalTimer() {
